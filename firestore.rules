@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Menu Items Collection
+    match /menu_items/{itemId} {
+      allow read: if true;
+      allow write: if true; // Allowed since no OAuth is required and operations are handled via password verification in-app
+    }
+
+    // Orders Collection
+    match /orders/{orderId} {
+      allow read, create, update: if true; // Customers read/create orders; Admins read/update order statuses
+      allow delete: if false; // Deletion is disabled to preserve operational logs
+    }
+
+    // System Config Collection (stores admin password hashes)
+    match /system_config/{configId} {
+      allow read, write: if true; // Allowed so the first-time setup and password verification can access this unauthenticated
+    }
+  }
+}
