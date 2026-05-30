@@ -1,0 +1,71 @@
+{
+  "entities": {
+    "menu_item": {
+      "title": "MenuItem",
+      "description": "A beverage item available for order from the menu",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "The unique ID of the menu item" },
+        "name": { "type": "string", "description": "The Chinese name of the drink" },
+        "englishName": { "type": "string", "description": "The English name of the drink" },
+        "category": { "type": "string", "description": "Category of the drink, e.g., 台灣原茶" },
+        "priceM": { "type": "integer", "description": "Price of the Medium size (null if not available)" },
+        "priceL": { "type": "integer", "description": "Price of the Large size" },
+        "isRecommended": { "type": "boolean", "description": "Is it a highly recommended item" },
+        "isHotPossible": { "type": "boolean", "description": "Is hot serving possible" },
+        "isNoCaffeine": { "type": "boolean", "description": "Is the beverage caffeine-free (decaf)" },
+        "description": { "type": "string", "description": "Brief description of the drink" },
+        "tags": { "type": "array", "description": "List of tags, e.g., ['特等獎茶師', '招牌必喝']" },
+        "onSale": { "type": "boolean", "description": "Whether the drink is currently active and available" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "category", "priceL", "onSale"]
+    },
+    "order": {
+      "title": "Order",
+      "description": "A customer order containing chosen drinks and checkout info",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique order ID" },
+        "orderNumber": { "type": "string", "description": "Sequential order tracking number (e.g., #1001)" },
+        "customerName": { "type": "string", "description": "Name of the customer placing order" },
+        "customerPhone": { "type": "string", "description": "Phone number of the customer" },
+        "items": { "type": "array", "description": "List of ordered items with customized ice, sugar, toppings" },
+        "totalPrice": { "type": "integer", "description": "Overal sum of order in TWD" },
+        "status": { "type": "string", "enum": ["pending", "preparing", "completed", "cancelled"] },
+        "remarks": { "type": "string", "description": "Customer special remarks" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "orderNumber", "customerName", "customerPhone", "items", "totalPrice", "status", "createdAt"]
+    },
+    "system_config": {
+      "title": "SystemConfig",
+      "description": "Internal system configurations, specifically the admin security credentials",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique settings key, usually 'admin'" },
+        "passwordHash": { "type": "string", "description": "SHA-256 hashed password string" },
+        "isConfigured": { "type": "boolean", "description": "True once the admin password has initially been configured" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "passwordHash", "isConfigured"]
+    }
+  },
+  "firestore": {
+    "menu_items/{itemId}": {
+      "schema": "menu_item",
+      "description": "Collection of all drinks in the tea shop menu"
+    },
+    "orders/{orderId}": {
+      "schema": "order",
+      "description": "Collection of incoming as well as historical customer orders"
+    },
+    "system_config/{configId}": {
+      "schema": "system_config",
+      "description": "Configuration collection targeting high level system values"
+    }
+  }
+}
