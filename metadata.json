@@ -1,0 +1,6 @@
+{
+  "name": "烏弄 UNOCHA 點單系統",
+  "description": "基於烏弄 UNOCHA 菜單開發的茶飲點記系統，包含完整的前台點單與後台 CRUD、訂單管理與管理密碼認證功能。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
